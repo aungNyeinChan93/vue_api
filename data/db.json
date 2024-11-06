@@ -1,0 +1,39 @@
+{
+  "customers": [
+    {
+      "id": "1",
+      "name": "aung aung",
+      "age": 18,
+      "gender": "male",
+      "address": "yangon"
+    },
+    {
+      "id": "2",
+      "name": "mg mg",
+      "age": 22,
+      "gender": "male",
+      "address": "mandalay"
+    },
+    {
+      "id": "3",
+      "name": "susu susu",
+      "age": 14,
+      "gender": "female",
+      "address": "bago"
+    },
+    {
+      "id": "6a63",
+      "name": "mumu",
+      "age": 16,
+      "gender": "female",
+      "address": "mandalay"
+    },
+    {
+      "id": "213f",
+      "name": "koko",
+      "age": 17,
+      "gender": "male",
+      "address": "yangon"
+    }
+  ]
+}
