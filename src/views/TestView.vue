@@ -11,12 +11,19 @@
             class="form-control my-2"
             v-model="customer.name"
           />
+          <small class="text-danger" v-show="validator.name"
+            >Name Filed is Required!</small
+          >
           <input
             type="number"
             placeholder="age"
             class="form-control my-2"
             v-model="customer.age"
           />
+          <small class="text-danger" v-show="validator.age"
+            >Age Filed is Required!</small
+          >
+          <br />
           <div class="float-start my-2">
             <input
               type="radio"
@@ -33,12 +40,23 @@
             />
             Female
           </div>
+
+          <br />
+          <div class="float-start">
+            <small class="text-danger" v-show="validator.gender"
+              >Gender Filed is Required!</small
+            >
+          </div>
           <input
             type="text"
             placeholder="address"
             class="form-control my-2"
             v-model="customer.address"
           />
+          <small class="text-danger" v-show="validator.address"
+            >Address Filed is Required!</small
+          >
+
           <button class="btn btn-sm btn-info my-2 d-flex">Submit</button>
         </form>
       </div>
@@ -60,6 +78,15 @@
         </div>
       </div>
       <!-- data have -->
+      <div class="row">
+        <div class="col-12">
+          <h4>
+            <span v-show="customers.length > 1">Total Customers - </span>
+            <span v-show="customers.length < 2">Total Customer - </span>
+            <span class="text-danger fst-italic"> {{ customers.length }} </span>
+          </h4>
+        </div>
+      </div>
       <div class="col-md-6 offset-3" v-if="customers.length">
         <table class="table table-bordered table-info table-hover">
           <thead class="">
@@ -103,26 +130,51 @@ export default {
     const customers = ref([]);
     const error = ref(null);
 
+    const validator = ref({
+      name: false,
+      age: false,
+      gender: false,
+      address: false,
+    });
+
     const customer = ref({
-      name: null,
-      age: null,
-      gender: null,
-      address: null,
+      name: "",
+      age: "",
+      gender: "",
+      address: "",
     });
 
     const customerCreate = async () => {
       try {
-        if (customer.value != "") {
+        validator.value.name = customer.value.name == "" ? true : false;
+        validator.value.age = customer.value.age == "" ? true : false;
+        validator.value.gender = customer.value.gender == "" ? true : false;
+        validator.value.address = customer.value.address == "" ? true : false;
+
+        if (
+          customer.value.name != "" &&
+          customer.value.age != "" &&
+          customer.value.gender != "" &&
+          customer.value.address != ""
+        ) {
           const res = await axios.post(
             "http://localhost:4000/customers",
             customer.value
           );
+          // getData();
           customers.value.push(res.data);
+          clearFields();
         }
-        customer.value = "";
       } catch (error) {
         console.log(error.message);
       }
+    };
+
+    const clearFields = () => {
+      customer.value.name = "";
+      customer.value.age = "";
+      customer.value.gender = "";
+      customer.value.address = "";
     };
 
     const deleteCustomer = async (id) => {
@@ -139,6 +191,7 @@ export default {
         const response = await axios.get("http://localhost:4000/customers");
         if (response.status == "200") {
           customers.value = await response.data;
+          // customer.value.id = ++customers.value.length;
         } else {
           throw Error("request is bad ");
         }
@@ -159,6 +212,8 @@ export default {
       customer,
       customerCreate,
       deleteCustomer,
+      clearFields,
+      validator,
     };
   },
 };
